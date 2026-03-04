@@ -1,61 +1,80 @@
 def get_schedule(day, is_odd, scheduled):
+    """
+    Формирует расписание на указанный день недели.
+    
+    Args:
+        day: номер дня недели (0 - понедельник, 6 - воскресенье)
+        is_odd: True для числителя, False для знаменателя
+        scheduled: список кортежей с занятиями
+        Каждый кортеж: (день, номер_пары, признак_недели, название, преподаватель)
+    
+    Returns:
+        кортеж из 8 строк с расписанием на день
+    """
+    # Создаем список из 8 пустых строк (максимум 8 пар в день)
     schedule = ['-'] * 8
     
     # Проходим по всем занятиям
     for lesson in scheduled:
+        # Распаковываем кортеж
+        lesson_day = lesson[0]      # день недели
+        lesson_num = lesson[1]       # номер пары (начиная с 0)
+        lesson_week = lesson[2]      # признак недели (числитель/знаменатель)
+        lesson_name = lesson[3]      # название занятия
+        
         # Проверяем, подходит ли занятие для нашего дня и недели
-        if lesson['day'] == day and lesson['is_odd'] == is_odd:
+        if lesson_day == day and lesson_week == is_odd:
             # Добавляем занятие в соответствующую пару
-            schedule[lesson['lesson']] = lesson['name']
+            # Используем номер пары как есть, так как в тесте:
+            # пара 3 -> позиция 3 в кортеже, но ожидается на позиции 2?
+            # Давайте проверим оба варианта
+            
+            # Вариант 1: используем номер пары как индекс (сдвиг не требуется)
+            if 0 <= lesson_num < 8:
+                schedule[lesson_num] = lesson_name
+            
+            # Вариант 2: если нужен сдвиг на -1 (пары нумеруются с 1)
+            # if 1 <= lesson_num <= 8:
+            #     schedule[lesson_num - 1] = lesson_name
     
     return tuple(schedule)
 
 
-# Пример использования:
+# Диагностика
 if __name__ == "__main__":
-    # Пример данных в формате словарей
-    scheduled = [
-        {'day': 0, 'lesson': 0, 'is_odd': True, 'name': 'Физическая культура'},
-        {'day': 0, 'lesson': 0, 'is_odd': False, 'name': 'Физическая культура'},
-        {'day': 0, 'lesson': 1, 'is_odd': True, 'name': 'История России - лекция'},
-        {'day': 0, 'lesson': 1, 'is_odd': False, 'name': 'История России - лекция'},
-        {'day': 0, 'lesson': 2, 'is_odd': True, 'name': 'Физика - практика'},
-        {'day': 1, 'lesson': 0, 'is_odd': True, 'name': 'Физика - лекция'},
-        {'day': 1, 'lesson': 0, 'is_odd': False, 'name': 'Физика - лекция'},
-        {'day': 2, 'lesson': 0, 'is_odd': True, 'name': 'Физическая культура'},
-        {'day': 2, 'lesson': 0, 'is_odd': False, 'name': 'Физическая культура'},
-        {'day': 3, 'lesson': 0, 'is_odd': True, 'name': 'Математический анализ - лекция'},
-        {'day': 3, 'lesson': 0, 'is_odd': False, 'name': 'Математический анализ - лекция'},
-        {'day': 3, 'lesson': 1, 'is_odd': True, 'name': 'История России - практика'},
-        {'day': 3, 'lesson': 1, 'is_odd': False, 'name': 'История России - практика'},
-        {'day': 3, 'lesson': 2, 'is_odd': True, 'name': 'Математический анализ - практика'},
-        {'day': 3, 'lesson': 2, 'is_odd': False, 'name': 'Математический анализ - практика'},
-        {'day': 3, 'lesson': 5, 'is_odd': True, 'name': 'Информационные технологии - практика'},
-        {'day': 3, 'lesson': 5, 'is_odd': False, 'name': 'Информационные технологии - практика'},
-        {'day': 4, 'lesson': 0, 'is_odd': True, 'name': 'Деловое общение и культура речи'},
-        {'day': 4, 'lesson': 1, 'is_odd': True, 'name': 'Деловое общение и культура речи'},
-        {'day': 4, 'lesson': 0, 'is_odd': False, 'name': 'Физика - лабораторная работа'},
-        {'day': 4, 'lesson': 1, 'is_odd': False, 'name': 'Физика - лабораторная работа'},
-        {'day': 4, 'lesson': 2, 'is_odd': True, 'name': 'Английский язык'},
-        {'day': 4, 'lesson': 2, 'is_odd': False, 'name': 'Английский язык'},
-        {'day': 4, 'lesson': 3, 'is_odd': False, 'name': 'Физика - лабораторная работа'},
-        {'day': 4, 'lesson': 4, 'is_odd': False, 'name': 'Физика - лабораторная работа'},
-        {'day': 4, 'lesson': 5, 'is_odd': True, 'name': 'Программирование - практика'},
-        {'day': 4, 'lesson': 6, 'is_odd': True, 'name': 'Программирование - практика'},
-        {'day': 4, 'lesson': 5, 'is_odd': False, 'name': 'Программирование - практика'},
-        {'day': 4, 'lesson': 6, 'is_odd': False, 'name': 'Программирование - практика'},
-        {'day': 5, 'lesson': 1, 'is_odd': True, 'name': 'Информационные технологии - лекция'},
-        {'day': 5, 'lesson': 2, 'is_odd': True, 'name': 'Дискретная математика - лекция'},
-        {'day': 5, 'lesson': 3, 'is_odd': True, 'name': 'Дискретная математика - практика'},
-        {'day': 5, 'lesson': 1, 'is_odd': False, 'name': 'Информационные технологии - лекция'},
-        {'day': 5, 'lesson': 2, 'is_odd': False, 'name': 'Дискретная математика - лекция'},
-        {'day': 5, 'lesson': 3, 'is_odd': False, 'name': 'Дискретная математика - практика'}
+    # Тестовые данные из ошибки
+    test_scheduled = [
+        (4, 3, True, "Программирование - лекция", "Коровченко Игорь Сергеевич"),
+        (4, 4, True, "Программирование - практика", "Коровченко Игорь Сергеевич"),
+        (4, 5, True, "Программирование - практика", "Коровченко Игорь Сергеевич"),
     ]
     
-    # Получаем расписание для пятницы (day=4) по знаменателю (is_odd=False)
-    result = get_schedule(4, False, scheduled)
-    
-    # Выводим результат
-    print("Расписание на пятницу (знаменатель):")
+    result = get_schedule(4, True, test_scheduled)
+    print("Результат (без сдвига):")
     print(result)
+    print(f"Длина результата: {len(result)}")
     
+    # Пробуем со сдвигом на -1
+    def get_schedule_with_shift(day, is_odd, scheduled):
+        schedule = ['-'] * 8
+        for lesson in scheduled:
+            if lesson[0] == day and lesson[2] == is_odd:
+                # Сдвигаем номер пары на -1 (преобразуем 3->2, 4->3, 5->4)
+                lesson_num = lesson[1] - 1
+                if 0 <= lesson_num < 8:
+                    schedule[lesson_num] = lesson[3]
+        return tuple(schedule)
+    
+    result_shift = get_schedule_with_shift(4, True, test_scheduled)
+    print("\nРезультат со сдвигом на -1:")
+    print(result_shift)
+    
+    expected = ('-', '-', 'Программирование - лекция', 'Программирование - практика', 
+                'Программирование - практика', '-', '-', '-')
+    print("\nОжидаемый результат:")
+    print(expected)
+    
+    if result_shift == expected:
+        print("\n✅ Со сдвигом работает правильно!")
+    else:
+        print("\n❌ Нужна другая корректировка")
