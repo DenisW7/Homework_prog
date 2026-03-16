@@ -1,4 +1,4 @@
-# I'm Denis and I first step course in the VSU
+# I'm Denis and I first step course to the VSU
 
 ## I will publish my code for homework here and separate tasks at directories
 
